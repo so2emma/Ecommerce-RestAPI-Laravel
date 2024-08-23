@@ -34,16 +34,14 @@ class AuthenticationController extends Controller
 
     public function login(UserLoginRequest $request){
 
-        $user = new User();
-
         $user = User::where('email', $request->email)->first();
 
         if(!$user){
-            return new ApiErrorResponse("Invalid Credentials", null, Response::HTTP_UNAUTHORIZED);
+            return new ApiErrorResponse("User Not Found", null, Response::HTTP_UNAUTHORIZED);
         }
 
-        if(!Hash::check($request->passwrd, $user->password)) {
-            return new ApiErrorResponse("Invalid Credentials", null, Response::HTTP_UNAUTHORIZED);
+        if(!Hash::check($request->password, $user->password)) {
+            return new ApiErrorResponse("Invali Credentials", null, Response::HTTP_UNAUTHORIZED);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
