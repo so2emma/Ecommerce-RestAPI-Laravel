@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateProductRequest;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Responses\ApiSuccessResponse;
+use App\Http\Requests\CreateProductRequest;
+use App\Http\Responses\ApiErrorResponse;
+use Illuminate\Support\Facades\Http;
 
 class ProductController extends Controller
 {
@@ -25,7 +29,20 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        //
+
+        $category = Category::find($request->category_id);
+
+        if(!$category){
+            return new ApiErrorResponse("Category cannot be found", null, Response::HTTP_NOT_FOUND);
+        }
+
+        $product = Product::Create($request->all());
+
+        return new ApiSuccessResponse(
+            $product,
+            ['message' => 'Product Created Successfully'],
+            Response::HTTP_CREATED
+        );
     }
 
     /**
@@ -33,7 +50,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return new ApiSuccessResponse(
+            $product,
+            ["message" => "Single Category"]
+        );
     }
 
     /**
@@ -41,7 +61,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $category = Category::find($request->category_id);
+
+        if(!$category){
+            return new ApiErrorResponse("Category cannot be found", null, Response::HTTP_NOT_FOUND);
+        }
+
+        $product->update($request->all());
+
+        return new ApiSuccessResponse(
+            $product,
+            ['message' => 'Product updated successfully']
+        );
     }
 
     /**
@@ -49,6 +80,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return new ApiSuccessResponse(
+            null,
+            ['message' => "Product Deleted Successfully"]
+        );
     }
 }
