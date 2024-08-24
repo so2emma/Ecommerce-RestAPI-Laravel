@@ -31,5 +31,5 @@ Route::post("/users/register", [AuthenticationController::class , "register"]);
 Route::post("/users/login", [AuthenticationController::class , "login"]);
 Route::post("/users/logout", [AuthenticationController::class, 'logout']);
 
-Route::apiResource("categories", CategoryController::class);
+Route::apiResource("/product/categories", CategoryController::class);
 Route::apiResource("products", ProductController::class);

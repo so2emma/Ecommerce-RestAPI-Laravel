@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Responses\ApiSuccessResponse;
 
 class ProductController extends Controller
 {
@@ -12,13 +14,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return new ApiSuccessResponse(
+            Product::all(),
+            ['message' => "List of all Product"]
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateProductRequest $request)
     {
         //
     }

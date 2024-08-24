@@ -16,7 +16,7 @@ class CategoryController extends Controller
     {
         return new ApiSuccessResponse(
             Category::all(),
-            ['message' => "All Categories"]
+            ['message' => "List of all categories"]
         );
     }
 
@@ -49,8 +49,10 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
+        $category->update($request->all());
+        
         return new ApiSuccessResponse(
-            $category->update($request->all()),
+            $category,
             ['message' => "Category Updated Successfully"]
         );
     }
@@ -66,5 +68,5 @@ class CategoryController extends Controller
             ['message' => "Category Deleted Successfully"]
         );
     }
-    
+
 }
