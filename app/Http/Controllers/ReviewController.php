@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateReviewRequest;
+use App\Http\Requests\UpdateReviewsRequest;
+use App\Models\Review;
 use App\Models\Product;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Responses\ApiSuccessResponse;
-use App\Http\Requests\CreateProductRequest;
-use App\Http\Responses\ApiErrorResponse;
 
-class ProductController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,39 +17,33 @@ class ProductController extends Controller
     public function index()
     {
         return new ApiSuccessResponse(
-            Product::all(),
-            ['message' => "List of all Product"]
+            Review::all(),
+            ['message' => "List of all Reviews"]
         );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateProductRequest $request)
+    public function store(CreateReviewRequest $request, Product $product)
     {
-
-        $category = Category::find($request->category_id);
-
-        if(!$category){
-            return new ApiErrorResponse("Category cannot be found", null, Response::HTTP_NOT_FOUND);
-        }
-
-        $product = Product::Create($request->all());
+        $review = $product->reviews()->create($request->all());
 
         return new ApiSuccessResponse(
-            $product,
-            ['message' => 'Product Created Successfully'],
+            $review,
+            ["message" => "Review Created Successfully"],
             Response::HTTP_CREATED
         );
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(Review $review)
     {
         return new ApiSuccessResponse(
-            $product,
+            $review,
             ["message" => "Single Category"]
         );
     }
@@ -58,26 +51,29 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateReviewsRequest $request, Review $review)
     {
-        $product->update($request->all());
+        $review->update($request->all());
 
         return new ApiSuccessResponse(
-            $product,
-            ['message' => 'Product updated successfully']
+            $review,
+            ["message" => "Review Updated Successfully"]
         );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Review $review)
     {
-        $product->delete();
+        $review->delete();
+
         return new ApiSuccessResponse(
             null,
             ['message' => "Product Deleted Successfully"],
             Response::HTTP_NO_CONTENT
         );
+
+
     }
 }

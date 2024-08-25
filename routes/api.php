@@ -3,8 +3,7 @@
 use App\Http\Controllers\AuthController\AuthenticationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
-use App\Models\Category;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,3 +32,4 @@ Route::post("/users/logout", [AuthenticationController::class, 'logout']);
 
 Route::apiResource("/product/categories", CategoryController::class);
 Route::apiResource("products", ProductController::class);
+Route::apiResource("products.reviews", ReviewController::class)->scoped();
