@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController\AuthenticationController;
+use App\Http\Controllers\AuthController\MerchnatAuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
@@ -28,7 +29,11 @@ Route::post("/user/test",  [AuthenticationController::class , "register"] );
 
 Route::post("/users/register", [AuthenticationController::class , "register"]);
 Route::post("/users/login", [AuthenticationController::class , "login"]);
-Route::post("/users/logout", [AuthenticationController::class, 'logout']);
+Route::post("/users/logout", [AuthenticationController::class, 'logout'])->middleware("auth:sanctum");
+
+Route::post("/merchants/register", [MerchnatAuthController::class, "register"]);
+Route::post("/merchants/login", [MerchnatAuthController::class, "login"]);
+Route::post("/merchants/logout", [MerchnatAuthController::class, "logout"])->middleware("auth:merchant");
 
 Route::apiResource("/product/categories", CategoryController::class);
 Route::apiResource("products", ProductController::class);
