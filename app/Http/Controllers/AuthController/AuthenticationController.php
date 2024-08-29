@@ -36,12 +36,8 @@ class AuthenticationController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if(!$user){
-            return new ApiErrorResponse("User Not Found", null, Response::HTTP_UNAUTHORIZED);
-        }
-
-        if(!Hash::check($request->password, $user->password)) {
-            return new ApiErrorResponse("Invali Credentials", null, Response::HTTP_UNAUTHORIZED);
+        if(!$user || !Hash::check($request->password, $user->password)) {
+            return new ApiErrorResponse("The provided credential are incorrect", null, Response::HTTP_UNAUTHORIZED);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
